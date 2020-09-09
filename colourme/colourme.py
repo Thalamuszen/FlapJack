@@ -5,7 +5,7 @@ import discord
 from redbot.core import Config, checks, commands
 
 
-class colourMe(commands.Cog):
+class ColourMe(commands.Cog):
 
     """Manage the colour of your own name."""
 
@@ -79,7 +79,7 @@ class colourMe(commands.Cog):
                 if role_to_change is not None:
                     return await ctx.send("It looks like you have more than "
                                           "one role that can be used for "
-                                          "colourMe, so I'm not sure which one "
+                                          "ColourMe, so I'm not sure which one "
                                           "to edit. Talk to your server admin "
                                           "about fixing this!")
                 role_to_change = role
@@ -88,14 +88,14 @@ class colourMe(commands.Cog):
             rolename = f"{name}#{disc}{self.suffix}"
             if self._already_has_colourme(ctx, rolename):
                 await ctx.send("It looks like the server already has "
-                               "a colourMe role for you, but it's not "
+                               "a ColourMe role for you, but it's not "
                                "applied to you. To be safe, I'm not "
                                "going to make a new one. Please talk "
                                "to your server admin about fixing this!")
                 return
             # Make a new cosmetic role for this person
             try:
-                new_role = await guild.create_role(reason='Custom colourMe Role',
+                new_role = await guild.create_role(reason='Custom ColourMe Role',
                                                    name=rolename,
                                                    colour=newcolour,
                                                    hoist=False,
@@ -108,7 +108,7 @@ class colourMe(commands.Cog):
                 return
 
             try:
-                await member.add_roles(new_role, reason='Custom colourMe Role')
+                await member.add_roles(new_role, reason='Custom ColourMe Role')
             except discord.Forbidden:
                 await ctx.send("Failed to apply new role. (permissions)")
                 return
@@ -118,11 +118,11 @@ class colourMe(commands.Cog):
             # Change to reply?
             await ctx.send("Your new colour is set.")
         else:
-            # Member appears to have an existing colourMe role
+            # Member appears to have an existing ColourMe role
             # Need to make sure they are not sharing with someone else
             if not self._is_sharing_role(ctx, role_to_change):
                 try:
-                    await role_to_change.edit(colour=newcolour, reason='colourMe Change')
+                    await role_to_change.edit(colour=newcolour, reason='ColourMe Change')
                 except discord.Forbidden:
                     return await ctx.send("Failed to edit role. (permissions)")
                 except discord.HTTPException:
@@ -132,7 +132,7 @@ class colourMe(commands.Cog):
             else:
                 # Change to reply?
                 await ctx.send("This is odd. It looks like you have a "
-                               "valid colourMe role, but you're sharing "
+                               "valid ColourMe role, but you're sharing "
                                "it with one or more members. To be "
                                "safe, I'm not going to edit it.")
                 return
@@ -150,12 +150,12 @@ class colourMe(commands.Cog):
                 if role.permissions != discord.Permissions.none():
                     dirty_roles.append(role)
         if not dirty_roles:
-            await ctx.send("I couldn't find any colourMe roles "
+            await ctx.send("I couldn't find any ColourMe roles "
                            "that need to be cleaned.")
             return
         msg_txt = ("I have scanned the list of roles on this server. "
                    "I have detected the following roles which were "
-                   "**possibly** created by colourMe, but still have "
+                   "**possibly** created by ColourMe, but still have "
                    "permissions attached to them. Would you like me to "
                    "remove all permissions from these roles? If you are "
                    "unsure, **please** cancel and manually verify the roles. "
@@ -188,7 +188,7 @@ class colourMe(commands.Cog):
                 await asyncio.sleep(1)
                 try:
                     await role.edit(permissions=discord.Permissions.none(),
-                                    reason='colourMe permission wipe')
+                                    reason='ColourMe permission wipe')
                 except discord.Forbidden:
                     await ctx.send(f"Failed to edit role: {role.name} (permissions)")
                 except discord.HTTPException:
@@ -200,7 +200,7 @@ class colourMe(commands.Cog):
     @checks.admin_or_permissions(manage_guild=True)
     async def _purge_colourme(self, ctx: commands.Context):
         """Purge the server of roles that may have been created
-        by colourMe, but are no longer in use."""
+        by ColourMe, but are no longer in use."""
         user = ctx.message.author
         guild = ctx.message.guild
         dead_roles = []
@@ -214,7 +214,7 @@ class colourMe(commands.Cog):
             return await ctx.send("I couldn't find any roles to purge.")
         msg_txt = ("I have scanned the list of roles on this server. "
                    "I have detected the following roles which were "
-                   "**possibly** created by colourMe, but are not any "
+                   "**possibly** created by ColourMe, but are not any "
                    "member's top_role, and are useless for setting colour. "
                    "Would you like me to delete these roles? If you are "
                    "unsure, **please** cancel and manually verify the roles. "
@@ -245,7 +245,7 @@ class colourMe(commands.Cog):
             for role in dead_roles:
                 await asyncio.sleep(1)
                 try:
-                    await role.delete(reason='colourMe role purge')
+                    await role.delete(reason='ColourMe role purge')
                 except discord.Forbidden:
                     await ctx.send(f"Failed to delete role: {role.name} (permissions)")
                 except discord.HTTPException:
